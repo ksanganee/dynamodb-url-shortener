@@ -1,0 +1,101 @@
+const express = require('express');
+const router = express.Router();
+const idgenerator = require("nanoid")
+const AWS = require('aws-sdk');
+AWS.config.update({
+  region: "eu-west-2",
+  endpoint: "http://localhost:8000"
+});
+
+var db = new AWS.DynamoDB();
+var docClient = new AWS.DynamoDB.DocumentClient();
+
+router.get('/', (req, res) => {
+  res.render("./partials/url", { layout: "main"});
+});
+
+router.post('/', (req, res) => {
+  var { id, url } = req.body;
+  if (!id) { id = idgenerator.nanoid(10) }
+  var params = {
+    TableName : "URL-REDIRECTS",
+    KeyConditionExpression: "id = :id",
+    ExpressionAttributeValues: {
+        ":id": id
+    }
+  }
+  docClient.query(params, (err, data) => {
+    if (err) {
+        console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
+    } else {
+        if (data.Items.length == 0) {
+          var params = {
+            TableName:"URL-REDIRECTS",
+            Item: {
+              "id": id,
+              "url": url,
+              "count": 0
+            }
+          }
+          docClient.put(params, function(err, data) {
+            if (err) {
+                console.error("Unable to add item. Error JSON:", JSON.stringify(err, null, 2));
+            } else {
+                console.log("Added item:", JSON.stringify(data, null, 2));
+            }
+          });
+          var newurl = process.env.CURRENTURL + "/url/" + id;
+          res.render("./partials/success", {
+            layout: "main",
+            data: {
+              url: newurl
+            }
+          })
+        } else {
+          res.render("./partials/url", {
+            layout: "main",
+            data: {
+              id: id,
+              url: url,
+              error: "That ID is taken, please try again"
+            }
+          })
+        }
+    }
+});
+});
+
+router.get("/:id", (req, res) => {
+  var id = req.params.id;
+  var params = {
+    TableName : "URL-REDIRECTS",
+    KeyConditionExpression: "id = :id",
+    ExpressionAttributeValues: {
+        ":id": id
+    }
+  }
+  docClient.query(params, function(err, data) {
+    if (err) {
+      res.render("./partials/error", {
+        layout: "main",
+        data: {
+          error: "An error has occured, please try again"
+        }
+      })
+    } else {
+      if (data.Items.length == 0) {
+        res.render("./partials/error", {
+          layout: "main",
+          data: {
+            error: "This ID does not exist"
+          }
+        })
+      } else {
+        var url = data.Items[0].url;
+        res.redirect(url)
+      }
+    }
+  });
+});
+
+module.exports = router;
