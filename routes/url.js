@@ -3,8 +3,10 @@ const router = express.Router();
 const idgenerator = require("nanoid")
 const AWS = require('aws-sdk');
 AWS.config.update({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_ACCESS_KEY_ID,
   region: "eu-west-2",
-  endpoint: "http://localhost:8000"
+  // endpoint: "http://localhost:8000"
 });
 
 var db = new AWS.DynamoDB();
@@ -44,7 +46,7 @@ router.post('/', (req, res) => {
                 console.log("Added item:", JSON.stringify(data, null, 2));
             }
           });
-          var newurl = process.env.CURRENTURL + "/url/" + id;
+          var newurl = process.env.URLBASE + "/url/" + id;
           res.render("./partials/success", {
             layout: "main",
             data: {
