@@ -14,6 +14,9 @@ app.engine("hbs", hbs({
   extname: "hbs"
 }));
 
+app.use("/", (req, res) => {
+  res.send("1")
+})
 
 app.use("/url", require("./routes/url.js"))
 
