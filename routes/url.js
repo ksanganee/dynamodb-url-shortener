@@ -28,7 +28,6 @@ router.post('/', (req, res) => {
   }
   docClient.query(params, (err, data) => {
     if (err) {
-        console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
     } else {
         if (data.Items.length == 0) {
           var params = {
@@ -41,9 +40,7 @@ router.post('/', (req, res) => {
           }
           docClient.put(params, function(err, data) {
             if (err) {
-                console.error("Unable to add item. Error JSON:", JSON.stringify(err, null, 2));
             } else {
-                console.log("Added item:", JSON.stringify(data, null, 2));
             }
           });
           var newurl = process.env.URLBASE + "/url/" + id;
@@ -108,13 +105,7 @@ router.get("/:id", (req, res) => {
           },
           ReturnValues:"UPDATED_NEW"
         };
-        docClient.update(params, function(err, data) {
-          if (err) {
-              console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
-          } else {
-              console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
-          }
-        });
+        docClient.update(params);
         res.redirect(url)
       }
     }

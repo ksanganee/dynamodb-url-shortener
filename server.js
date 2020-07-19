@@ -15,7 +15,7 @@ app.engine("hbs", hbs({
 }));
 
 app.get("/", (req, res, next) => {
-  res.send("1")
+  res.redirect("/url")
 })
 
 app.use("/url", require("./routes/url.js"))
