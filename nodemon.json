@@ -5,5 +5,5 @@
     "public/",
     "routes/"
   ],
-  "ext": "js, handlebars, css, json, hbs"
+  "ext": "js, handlebars, css, json, hbs, .env"
 }
