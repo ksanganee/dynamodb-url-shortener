@@ -4,8 +4,8 @@ const idgenerator = require("nanoid")
 const AWS = require('aws-sdk');
 AWS.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_ACCESS_KEY_ID,
-  region: "us-east-1",
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: "eu-west-2",
   // endpoint: "http://localhost:8000"
 });
 
@@ -94,6 +94,27 @@ router.get("/:id", (req, res) => {
         })
       } else {
         var url = data.Items[0].url;
+        var params = {
+          TableName: "URL-REDIRECTS",
+          Key: {
+            "id": data.Items[0].id
+          },
+          UpdateExpression: "set #c = :nc",
+          ExpressionAttributeValues: {
+            ":nc": data.Items[0].count + 1
+          },
+          ExpressionAttributeNames: {
+            "#c": "count"
+          },
+          ReturnValues:"UPDATED_NEW"
+        };
+        docClient.update(params, function(err, data) {
+          if (err) {
+              console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
+          } else {
+              console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
+          }
+        });
         res.redirect(url)
       }
     }

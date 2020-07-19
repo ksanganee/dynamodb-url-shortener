@@ -14,7 +14,7 @@ app.engine("hbs", hbs({
   extname: "hbs"
 }));
 
-app.use("/", (req, res) => {
+app.get("/", (req, res, next) => {
   res.send("1")
 })
 
