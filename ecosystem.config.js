@@ -8,7 +8,6 @@ module.exports = {
       "AWS_ACCESS_KEY_ID": "AKIAI6FKZ3TZTWTDB5JQ",
       "AWS_SECRET_ACCESS_KEY": "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"
    }
-    watch: '.'
   }, {
     script: './service-worker/',
     watch: ['./service-worker']
