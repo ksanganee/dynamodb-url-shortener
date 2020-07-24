@@ -36,7 +36,7 @@ router.post('/', (req, res) => {
           ":id": id
       }
     }
-    docClient.query(params, (err, data) => {
+      docClient.query(params, (err, data) => {
       if (err) {
       } else {
           if (data.Items.length == 0) {
@@ -70,10 +70,11 @@ router.post('/', (req, res) => {
               }
             })
           }
-       }
-     }
-  });
-});
+        }
+      })
+    }
+  }
+);
 
 router.get("/:id", (req, res) => {
   var id = req.params.id;
