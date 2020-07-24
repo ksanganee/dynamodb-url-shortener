@@ -117,7 +117,7 @@ router.get("/:id", (req, res) => {
           },
           ReturnValues:"UPDATED_NEW"
         };
-        docClient.update(params);
+        docClient.update(params, function(err, data) {});
         res.redirect(url)
       }
     }
