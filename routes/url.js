@@ -19,6 +19,16 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
   var { id, url } = req.body;
   if (!id) { id = idgenerator.nanoid(10) }
+  if (!url)  {
+   res.render("./partials/url", {
+      layout: "main",
+      data: {
+        id: id,
+        url: url,
+        error: "Please enter a url and try again"
+      }
+    })
+  }
   var params = {
     TableName : "URL-REDIRECTS",
     KeyConditionExpression: "id = :id",
@@ -60,7 +70,7 @@ router.post('/', (req, res) => {
             }
           })
         }
-    }
+     }
 });
 });
 
