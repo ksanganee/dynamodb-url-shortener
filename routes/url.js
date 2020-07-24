@@ -19,49 +19,60 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
   var { id, url } = req.body;
   if (!id) { id = idgenerator.nanoid(10) }
-  var params = {
-    TableName : "URL-REDIRECTS",
-    KeyConditionExpression: "id = :id",
-    ExpressionAttributeValues: {
-        ":id": id
+  if (!url)  {
+   res.render("./partials/url", {
+      layout: "main",
+      data: {
+        id: id,
+        url: url,
+        error: "Please enter a url and try again"
+      }
+    })
+  } else {
+    var params = {
+      TableName : "URL-REDIRECTS",
+      KeyConditionExpression: "id = :id",
+      ExpressionAttributeValues: {
+          ":id": id
+      }
     }
-  }
-  docClient.query(params, (err, data) => {
-    if (err) {
-    } else {
-        if (data.Items.length == 0) {
-          var params = {
-            TableName:"URL-REDIRECTS",
-            Item: {
-              "id": id,
-              "url": url,
-              "count": 0
+    docClient.query(params, (err, data) => {
+      if (err) {
+      } else {
+          if (data.Items.length == 0) {
+            var params = {
+              TableName:"URL-REDIRECTS",
+              Item: {
+                "id": id,
+                "url": url,
+                "count": 0
+              }
             }
+            docClient.put(params, function(err, data) {
+              if (err) {
+              } else {
+              }
+            });
+            var newurl = process.env.URLBASE + "/url/" + id;
+            res.render("./partials/success", {
+              layout: "main",
+              data: {
+                url: newurl
+              }
+            })
+          } else {
+            res.render("./partials/url", {
+              layout: "main",
+              data: {
+                id: id,
+                url: url,
+                error: "That ID is taken, please try again"
+              }
+            })
           }
-          docClient.put(params, function(err, data) {
-            if (err) {
-            } else {
-            }
-          });
-          var newurl = process.env.URLBASE + "/url/" + id;
-          res.render("./partials/success", {
-            layout: "main",
-            data: {
-              url: newurl
-            }
-          })
-        } else {
-          res.render("./partials/url", {
-            layout: "main",
-            data: {
-              id: id,
-              url: url,
-              error: "That ID is taken, please try again"
-            }
-          })
-        }
-    }
-});
+       }
+     }
+  });
 });
 
 router.get("/:id", (req, res) => {
