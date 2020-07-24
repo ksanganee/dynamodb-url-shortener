@@ -28,50 +28,51 @@ router.post('/', (req, res) => {
         error: "Please enter a url and try again"
       }
     })
-  }
-  var params = {
-    TableName : "URL-REDIRECTS",
-    KeyConditionExpression: "id = :id",
-    ExpressionAttributeValues: {
-        ":id": id
+  } else {
+    var params = {
+      TableName : "URL-REDIRECTS",
+      KeyConditionExpression: "id = :id",
+      ExpressionAttributeValues: {
+          ":id": id
+      }
     }
-  }
-  docClient.query(params, (err, data) => {
-    if (err) {
-    } else {
-        if (data.Items.length == 0) {
-          var params = {
-            TableName:"URL-REDIRECTS",
-            Item: {
-              "id": id,
-              "url": url,
-              "count": 0
+    docClient.query(params, (err, data) => {
+      if (err) {
+      } else {
+          if (data.Items.length == 0) {
+            var params = {
+              TableName:"URL-REDIRECTS",
+              Item: {
+                "id": id,
+                "url": url,
+                "count": 0
+              }
             }
+            docClient.put(params, function(err, data) {
+              if (err) {
+              } else {
+              }
+            });
+            var newurl = process.env.URLBASE + "/url/" + id;
+            res.render("./partials/success", {
+              layout: "main",
+              data: {
+                url: newurl
+              }
+            })
+          } else {
+            res.render("./partials/url", {
+              layout: "main",
+              data: {
+                id: id,
+                url: url,
+                error: "That ID is taken, please try again"
+              }
+            })
           }
-          docClient.put(params, function(err, data) {
-            if (err) {
-            } else {
-            }
-          });
-          var newurl = process.env.URLBASE + "/url/" + id;
-          res.render("./partials/success", {
-            layout: "main",
-            data: {
-              url: newurl
-            }
-          })
-        } else {
-          res.render("./partials/url", {
-            layout: "main",
-            data: {
-              id: id,
-              url: url,
-              error: "That ID is taken, please try again"
-            }
-          })
-        }
+       }
      }
-});
+  });
 });
 
 router.get("/:id", (req, res) => {
