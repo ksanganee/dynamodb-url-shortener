@@ -2,6 +2,7 @@ const express = require("express");
 const hbs = require("express-handlebars");
 require("dotenv").config();
 const bodyParser = require("body-parser");
+const subdomain = require('express-subdomain');
 
 const app = express()
 app.use(express.static("public"));
@@ -17,6 +18,8 @@ app.engine("hbs", hbs({
 app.get("/", (req, res, next) => {
   res.redirect("/url")
 })
+
+app.use(subdomain('api', require("./routes/api.js")));
 
 app.use("/url", require("./routes/url.js"))
 
