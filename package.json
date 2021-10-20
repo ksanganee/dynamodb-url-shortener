@@ -1,0 +1,29 @@
+{
+  "name": "dynamodb-url-shortener",
+  "version": "1.0.0",
+  "description": "A url shortening service using Amazon's DynamoDB",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ksanganee/dynamodb-url-shortener.git"
+  },
+  "author": "Kiran",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ksanganee/dynamodb-url-shortener/issues"
+  },
+  "homepage": "https://github.com/ksanganee/dynamodb-url-shortener#readme",
+  "dependencies": {
+    "aws-sdk": "^2.713.0",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-handlebars": "^5.0.0",
+    "express-subdomain": "^1.0.5",
+    "nanoid": "^3.1.10"
+  }
+}

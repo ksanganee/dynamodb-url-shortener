@@ -1,0 +1,19 @@
+<form action="/url" method="post" enctype="application/json">
+  <div class="form-div">
+    <div class="id-div">
+      <label for="id-input">Leave blank for an auto generated one:</label>
+      <input id="id-input" type="text" name="id" placeholder="enter a personalized id" value={{ data.id }}>
+    </div>
+    <div class="url-div">
+      <input class="url-input" type="url" name="url" placeholder="enter the url" value ={{ data.url }}>
+      <!-- <input class="url-input" name="url" placeholder="enter the url" value ={{ data.url }}> -->
+    </div>
+    <div class="submit-div">
+      <button type="submit">Get a short url</button>
+    </div>
+  </div>
+  <div class="error-div">
+      {{ data.error }}
+  </div>
+</form>
+<!-- a -->

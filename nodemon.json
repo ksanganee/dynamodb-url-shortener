@@ -1,0 +1,9 @@
+{
+  "watch": [
+    "server.js",
+    "views/",
+    "public/",
+    "routes/"
+  ],
+  "ext": "js, handlebars, css, json, hbs, .env"
+}

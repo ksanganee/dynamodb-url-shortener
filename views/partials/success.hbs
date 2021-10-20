@@ -1,0 +1,12 @@
+<p>You have sucessfully created a redirect link at:</p>
+<input id="contains-url" class="url-input" value="{{ data.url }}">
+<button class="btn" onclick="copytoclipboard()">
+    <img src="./assets/clippy.png" alt="Copy to clipboard" style="width:20px;height:20px;">
+</button>
+<script>
+  function copytoclipboard() {
+    var urlInput = document.getElementById("contains-url")
+    urlInput.select();
+    document.execCommand("copy")
+  }
+</script>
